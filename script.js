@@ -4,7 +4,7 @@
 // @version      0.1
 // @description  Salvando dados do formulario de geração de documentos - Sindicâncias
 // @author       Marcelo Valvassori Bittencourt - 2º Ten Bittencourt
-// @match        http://sistemas.badmapcmo.eb.mil.br/SisJur/sisSindInv/*
+// @match        http://sistemas.badmapcmo.eb.mil.br/SisJur/*
 // @grant        none
 // @require      http://sistemas.badmapcmo.eb.mil.br/SisJur/sisSindInv/assets/js/bootstrapValidator.js
 // ==/UserScript==
