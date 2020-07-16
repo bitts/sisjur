@@ -1,10 +1,10 @@
 // ==UserScript==
-// @name         Sindicância no SisJur - BAdmApCMO
+// @name         Sindicância
 // @namespace    http://tampermonkey.net/
-// @version      0.1
-// @description  Salvando dados do formulario de geração de documentos - Sindicâncias
-// @author       Marcelo Valvassori Bittencourt - 2º Ten Bittencourt
-// @match        http://sistemas.badmapcmo.eb.mil.br/SisJur/*
+// @version      1.2
+// @description  Salvando dados do formulario
+// @author       Marcelo Bittencourt
+// @match        http://sistemas.badmapcmo.eb.mil.br/SisJur/sisSindInv/*
 // @grant        none
 // @require      http://sistemas.badmapcmo.eb.mil.br/SisJur/sisSindInv/assets/js/bootstrapValidator.js
 // ==/UserScript==
@@ -29,7 +29,10 @@
         });
         return o;
     };
-  
+
+    /**
+     * @param {mixed} values The values in JSON format (Javascript object or string)
+     * */
     $.fn.populateForm = function (values) {
         if (values === '')return;
         var $form = this;
@@ -49,7 +52,7 @@
             switch (type) {
                 case 'textarea':
                     var ida = $el.attr('id');
-                    var txta = (CKEDITOR)?CKEDITOR.instances[ida]:$el
+                    var txta = (CKEDITOR)?CKEDITOR.instances[ida]:$el;
                     if( txta && txta.name && txta.status === "ready" )txta.setData(val);
                     $el.val(val);
                     break;
@@ -83,18 +86,31 @@
                         let nb = id.substring(id.length, id.length - 1);
 
                         let i = 0;
-                        $.map(val, function(vl){
-                            if(i == 0){
-                                fm.find('[name="Termo'+ nb +'option[]"]').val(vl);
-                            }else{
-                                let $template = $('#optionTemplate'+ nb);
-                                let $clone = $template.clone().removeClass('hide').removeAttr('id').insertBefore($template);
-                                let $option = $clone.find('[name="Termo'+ nb +'option[]"]').val(vl);
-
-                                $('#'+ id).bootstrapValidator('addField', $option);
-                            }
-                            i++;
+                        let values = [];
+                        $.each(val, function(i, elm){
+                            if($.inArray(elm, values) === -1) values.push(elm);
                         });
+
+                        let cnt=false;
+                        $.map( fm.find('input[name="Termo'+ nb +'option[]"]'), function(elm){
+                            var th_vle = $(elm).val();
+                            if($.inArray(th_vle, values) !== -1)cnt=true;
+                        });
+
+                        if(!cnt){
+                            $.map(values, function(vl){
+                                if(i == 0){
+                                    fm.find('input[name="Termo'+ nb +'option[]"]').val(vl);
+                                }else{
+                                    let $template = $('#optionTemplate'+ nb);
+                                    let $clone = $template.clone().removeClass('hide').removeAttr('id').insertBefore($template);
+                                    let $option = $clone.find('[name="Termo'+ nb +'option[]"]').removeAttr('disabled').val((vl && vl !== '')?vl:'');
+
+                                    $('#'+ id).bootstrapValidator('addField', $option);
+                                }
+                                i++;
+                            });
+                        }
                     } else{
                         $el.val(val);
                     }
@@ -108,11 +124,15 @@
 
     $(document).ready(function() {
 
+        //expandir todos: $('form').find('h3').find("a[data-toggle='collapse']").click()
+
         function msg(txt) {
             $('.feedback').txt(txt).animate({
                 height: 'toggle'
             });
         }
+
+        $("div[id^='optionTemplate']").find('input').attr({'disabled':'disabled'});
 
         var box = $('<div />')
         .addClass('well well-sm text-center incremento')
@@ -128,7 +148,6 @@
                 var formData = $('form').serializeObject();
                 var txt = JSON.stringify(formData, undefined, 4);
                 $('.incremento > textarea').val(txt);
-                msg('Dados gerados');
                 return false;
             }),
             ' ',
@@ -151,7 +170,6 @@
                 e.preventDefault();
                 let values = JSON.parse($('.incremento > textarea').val());
                 $("form").populateForm(values);
-                msg('Dados preenchidos no formulário.');
             }),
             ' ',
             $('<button />')
@@ -169,13 +187,12 @@
                 a.setAttribute('download', fileName);
                 a.setAttribute('href', url);
                 a.click();
-                
-                msg('Gerando arquivo para Download.');
             }),
             ' ',
             $('<div />').addClass('feedback')
         );
         $('body > div.container').prepend(box);
+
     });
 
 })(jQuery);
