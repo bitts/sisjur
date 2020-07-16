@@ -18,7 +18,10 @@ Estas melhorias basicamente incluem uma caixa no topo dos formulários com a des
 - Botão "Preencher": pega dados do JSON apresetados na textarea e preenche os formulários com os dados;
 - Botão "Download": gera um arquivos txt com o conteudo JSON da textarea.
 
-
+# Versions
+- [01/07/2020] 1.0 - Lançamento do script de importação/exportação de dados do SusJur;
+- [15/07/2020] 1.1 - Correção de campos input do tipo array, antes duplicando último campo;
+- [15/07/2020] 1.2 - Correção de preenchimento automatica de dados testando para evitar dados repetidas no inputs do tipo array;
 
 # Uso
 https://www.tampermonkey.net/?ext=dhdg
