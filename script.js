@@ -131,7 +131,7 @@
                 height: 'toggle'
             });
         }
-
+        var filebkp = 'backup_sindicancia.txt';
         $("div[id^='optionTemplate']").find('input').attr({'disabled':'disabled'});
 
         var box = $('<div />')
@@ -181,7 +181,7 @@
                 let text = $('.incremento > textarea').val();
                 let data = new Blob([text], {type: 'text/plain'});
                 let url = window.URL.createObjectURL(data);
-                var fileName = 'backup_sindicancia.txt';
+                let fileName = filebkp;
 
                 let a = document.createElement('a');
                 a.setAttribute('download', fileName);
