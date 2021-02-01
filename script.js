@@ -3,7 +3,7 @@
 // @namespace    http://tampermonkey.net/
 // @version      1.2
 // @description  Salvando dados do formulario
-// @author       Marcelo Bittencourt
+// @author       Marcelo Valvassori Bittencourt
 // @match        http://sistemas.badmapcmo.eb.mil.br/SisJur/sisSindInv/*
 // @grant        none
 // @require      http://sistemas.badmapcmo.eb.mil.br/SisJur/sisSindInv/assets/js/bootstrapValidator.js
